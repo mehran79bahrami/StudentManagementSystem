@@ -49,6 +49,87 @@ namespace StudentManagementSystem
             return ResultList;
         }
 
-        //todo
+        public Student SearchStudentId(int id)
+        {
+
+            foreach (Student temp in StudentList)
+            {
+                if (temp.ID == id)
+                {
+                    return temp;
+                }
+
+            }
+            return null;
+        }
+
+        public List<Student> SortByFullName()
+        {
+            List<Student> ResultList = new List<Student>(StudentList);
+
+            for (int i = 0; i < ResultList.Count - 1; i++)
+            {
+                for (int j = 0; j < ResultList.Count - 1 - i; j++)
+                {
+                    if (ResultList[j].FullName.CompareTo(ResultList[j + 1].FullName) > 0)
+                    {
+                        Student temp = ResultList[j];
+                        ResultList[j] = ResultList[j + 1];
+                        ResultList[j + 1] = temp;
+                    }
+                }
+            }
+
+            return ResultList;
+        }
+
+        public List<Student> SortByAge()
+        {
+            List<Student> ResultList = new List<Student>(StudentList);
+
+            for (int i = 0; i < ResultList.Count - 1; i++)
+            {
+                for (int j = 0; j < ResultList.Count - 1 - i; j++)
+                {
+                    if (ResultList[j].Age.CompareTo(ResultList[j + 1].Age) > 0)
+                    {
+                        Student temp = ResultList[j];
+                        ResultList[j] = ResultList[j + 1];
+                        ResultList[j + 1] = temp;
+                    }
+                }
+            }
+
+            return ResultList;
+        }
+
+        public int StudentCunt()
+        {
+            return StudentList.Count;
+        }
+
+
+
+        public bool EditStudent(int id, string fullname, int age, string email, string phonenumber)
+        {
+            for (int i = 0; i < StudentList.Count; i++)
+            {
+                if (StudentList[i].ID == id)
+                {
+                    StudentList[i].FullName = fullname;
+                    StudentList[i].Age = age;
+                    StudentList[i].Email = email;
+                    StudentList[i].PhoneNumber = phonenumber;
+
+                    return true;
+                }
+            }
+
+
+            return false;
+
+
+        }
     }
 }
+
