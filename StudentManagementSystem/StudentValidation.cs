@@ -20,7 +20,7 @@ namespace StudentManagementSystem
                 return "Full name cannot be empty";
             }
 
-            else if (!fullname.Contains(" "))
+            else if (!fullname.Contains(' '))
             {
                 return "Enter both first and last name separated by a space";
             }
@@ -74,7 +74,26 @@ namespace StudentManagementSystem
 
         public static string ValidatePhoneNumber(string phonenumber)
         {
-            //todo
+
+
+            if (string.IsNullOrEmpty(phonenumber))
+            {
+                return "Phone number cannot be empty";
+            }
+            else if (!(phonenumber.All(char.IsDigit)))
+            {
+                return "phone number cannot contain letters or spaces";
+
+            }
+            else if (phonenumber.Length != 11)
+            {
+                return "phone number must be exactly 11 digits long";
+            }
+            else if (phonenumber[0] != '0' || phonenumber[1] != '9')
+            {
+                return "phone number must start with 09_________";
+
+            }
             return null;
         }
 
