@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace StudentManagementSystem
 {
@@ -20,7 +21,7 @@ namespace StudentManagementSystem
                 return "Full name cannot be empty";
             }
 
-            else if (!fullname.Contains(' '))
+            else if (!(fullname.Contains(' ')))
             {
                 return "Enter both first and last name separated by a space";
             }
@@ -66,12 +67,6 @@ namespace StudentManagementSystem
             return null;
         }
 
-        public static string ValidateEmail(string email)
-        {
-            //todo
-            return null;
-        }
-
         public static string ValidatePhoneNumber(string phonenumber)
         {
 
@@ -82,21 +77,100 @@ namespace StudentManagementSystem
             }
             else if (!(phonenumber.All(char.IsDigit)))
             {
-                return "phone number cannot contain letters or spaces";
+                return "Phone number cannot contain letters or spaces";
 
             }
             else if (phonenumber.Length != 11)
             {
-                return "phone number must be exactly 11 digits long";
+                return "Phone number must be exactly 11 digits long";
             }
             else if (phonenumber[0] != '0' || phonenumber[1] != '9')
             {
-                return "phone number must start with 09_________";
+                return "Phone number must start with 09_________";
 
             }
             return null;
         }
 
 
+        public static string ValidateEmail(string email)
+        {
+
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return "Email cannot be empty";
+            }
+
+            foreach (char c in email)
+            {
+                if (!((c >= '0' & c <= '9' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '.') || (c == '@'))))
+                {
+                    return "Email contains invalid characters. Only letters, numbers, Dot, and @ are allowed";
+                }
+            }
+
+            if (!(email.Contains('@')))
+            {
+                return "Email most contain exactly one '@'";
+            }
+            if (!(email.Contains('.')))
+            {
+                return "Email most contain '.'";
+            }
+
+            if ((email[0] == '@' || email[email.Length - 1] == '@'))
+            {
+                return "Email cannot start or end with '@'";
+
+            }
+            if ((email[0] == '.' || email[email.Length - 1] == '.'))
+            {
+                return "Email cannot start or end with '.'";
+
+            }
+
+            int AtCount = 0;
+            foreach (char c in email)
+            {
+                if (c == '@')
+                {
+                    AtCount++;
+                }
+            }
+            if (AtCount != 1)
+            {
+                return "Email most contain exactly one '@'";
+
+            }
+
+            for (int i = 0; i < email.Length - 1; i++)
+            {
+                char c1 = email[i];
+                char c2 = email[i + 1];
+
+                bool DubleChar1 = ((c1 == '.') || (c1 == '@'));
+                bool DubleChar2 = ((c2 == '.') || (c2 == '@'));
+
+                if ((DubleChar1 == DubleChar2) && DubleChar1 == true)
+                {
+                    return "Email cannot have two consecutive characters (. and @)";
+                }
+            }
+
+            //ty mmd
+            int AtIndex = email.IndexOf('@');
+            string DomainPart = email.Substring(AtIndex + 1);
+            if (!(Regex.IsMatch(DomainPart, "^[^.]+(\\.[^.]+)+$")))
+            {
+                return "Invalid domain";
+            }
+
+            if (email.Length > 75)
+            {
+                return "Enail is too long (MAX 75 characters)";
+
+            }
+            return null;
+        }
     }
 }
