@@ -41,10 +41,28 @@ namespace StudentManagementSystem
             return null;
         }
 
-        public static string ValidateAge(string AgeInput, out int age)
+        public static string ValidateAge(string input, out int age)
         {
-            //todo
+
             age = 0;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return "Age cannot be empty";
+            }
+
+            else if (!(int.TryParse(input, out age)))
+            {
+                return "Age most be a integer";
+            }
+            else if (age < 14 || age > 23)
+            {
+                age = 0;
+
+                return "Age most be between 14 and 23";
+            }
+
+
+
             return null;
         }
 
