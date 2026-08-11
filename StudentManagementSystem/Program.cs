@@ -59,8 +59,7 @@ namespace StudentManagementSystem
                         SearchbyIDFlow();
                         break;
                     case "6":
-                        Console.WriteLine("Search by Name");
-                        //todo
+                        SearchbyNameFlow();
                         break;
                     case "7":
                         SortbyNameFlow();
@@ -335,6 +334,59 @@ namespace StudentManagementSystem
             }
 
 
+        }
+
+        static void SearchbyNameFlow()
+        {
+
+            Console.Clear();
+            Console.WriteLine("----- Search by Full Name ID -----");
+            Console.WriteLine("you can type 'cancel' to abort");
+
+            string error = null;
+            string input = null;
+            while (true)
+            {
+                
+                Console.Write("\nEnter Student Full Name to Search: ");
+                input = Console.ReadLine();
+                if (input.ToLower() == "cancel")
+                {
+                    return;
+                }
+                error = StudentValidation.ValidateFullName(input);
+                if (error == null)
+                {
+                    break;
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(error+" Enter again: ");
+                    Console.ResetColor();
+                }
+                
+            }
+
+
+            List<Student> result = manager.SearchStudentFullName(input);
+
+            if (result.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Student with Full Name:{input} NOT FOUND");
+                Console.ResetColor();
+                return;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                foreach (Student student in result)
+                {
+                    Console.WriteLine($"Full Name: {student.FullName},ID: {student.ID}, Age: {student.Age}, Phone Number: {student.PhoneNumber}, Email: {student.Email}");
+                }
+                Console.ResetColor();
+            }
         }
     }
 }
