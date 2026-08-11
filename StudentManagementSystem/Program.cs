@@ -56,8 +56,7 @@ namespace StudentManagementSystem
                         break;
 
                     case "5":
-                        Console.WriteLine("Search by ID");
-                        //todo
+                        SearchbyIDFlow();
                         break;
                     case "6":
                         Console.WriteLine("Search by Name");
@@ -168,7 +167,7 @@ namespace StudentManagementSystem
                 string error = StudentValidation.ValidateFullName(input);
                 if (error == null)
                 {
-                    FullName= input;
+                    FullName = input;
                     break;
                 }
 
@@ -187,9 +186,9 @@ namespace StudentManagementSystem
                     return;
                 }
                 string error = StudentValidation.ValidateAge(input, out int NewAge);
-                if (error == null && NewAge!=0)
+                if (error == null && NewAge != 0)
                 {
-                    age= NewAge;
+                    age = NewAge;
                     break;
                 }
 
@@ -238,7 +237,7 @@ namespace StudentManagementSystem
                 Console.ResetColor();
             }
 
-            manager.AddStudent(FullName, age,Email,PhoneNumber);
+            manager.AddStudent(FullName, age, Email, PhoneNumber);
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("* * * * Student added successfully * * * *");
             Console.ResetColor();
@@ -253,7 +252,7 @@ namespace StudentManagementSystem
 
 
             int InputID = 0;
-            while (true) 
+            while (true)
             {
                 Console.Write("\nEnter Student ID to remove: ");
                 string input = Console.ReadLine();
@@ -262,11 +261,11 @@ namespace StudentManagementSystem
                     return;
                 }
 
-                if(int.TryParse(input, out InputID))
+                if (int.TryParse(input, out InputID))
                 {
                     break;
                 }
-                Console.ForegroundColor= ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("Invalid ID, Enter a Number");
                 Console.ResetColor();
             }
@@ -281,10 +280,58 @@ namespace StudentManagementSystem
             }
             else
             {
-                Console.ForegroundColor=ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
                 Console.ResetColor();
 
+            }
+
+
+        }
+
+
+
+        static void SearchbyIDFlow()
+        {
+            Console.Clear();
+            Console.WriteLine("----- Search Student by ID -----");
+            Console.WriteLine("you can type 'cancel' to abort");
+
+            int InputID = 0;
+
+            while (true)
+            {
+                Console.Write("\nEnter Student ID to Search: ");
+                string input = Console.ReadLine();
+                if (input.ToLower() == "cancel")
+                {
+                    return;
+                }
+
+                if (int.TryParse(input, out InputID))
+                {
+                    break;
+                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("Invalid ID, Enter a Number");
+                Console.ResetColor();
+            }
+
+
+            Student result = manager.SearchStudentId(InputID);
+
+            if (result == null)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
+                Console.ResetColor();
+                return;
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"Full Name: {result.FullName},ID: {result.ID}, Age: {result.Age}, Phone Number: {result.PhoneNumber}, Email: {result.Email}");
+                Console.ResetColor();
             }
 
 
