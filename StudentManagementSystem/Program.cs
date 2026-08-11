@@ -33,7 +33,7 @@ namespace StudentManagementSystem
         static void Main(string[] args)
         {
 
-
+            
             while (true)
             {
                 ShowMenu();
@@ -45,8 +45,7 @@ namespace StudentManagementSystem
                         AddStudentFlow();
                         break;
                     case "2":
-                        Console.WriteLine("Remove Student");
-                        //todo
+                        RemoveStudentFlow();
                         break;
                     case "3":
                         Console.WriteLine("Edit Student");
@@ -243,6 +242,52 @@ namespace StudentManagementSystem
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("* * * * Student added successfully * * * *");
             Console.ResetColor();
+        }
+
+        static void RemoveStudentFlow()
+        {
+            Console.Clear();
+            Console.WriteLine("----- Remove Student -----");
+            Console.WriteLine("you can type 'cancel' to abort");
+
+
+
+            int InputID = 0;
+            while (true) 
+            {
+                Console.Write("\nEnter Student ID to remove: ");
+                string input = Console.ReadLine();
+                if (input.ToLower() == "cancel")
+                {
+                    return;
+                }
+
+                if(int.TryParse(input, out InputID))
+                {
+                    break;
+                }
+                Console.ForegroundColor= ConsoleColor.Red;
+                Console.WriteLine("Invalid ID, Enter a Number");
+                Console.ResetColor();
+            }
+
+            bool remove = manager.RemoveStudent(InputID);
+            if (remove)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"* * * * Student with ID:{InputID} removed successfully * * * *");
+                Console.ResetColor();
+
+            }
+            else
+            {
+                Console.ForegroundColor=ConsoleColor.Red;
+                Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
+                Console.ResetColor();
+
+            }
+
+
         }
     }
 }
