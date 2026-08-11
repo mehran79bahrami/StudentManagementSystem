@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace StudentManagementSystem
 {
+    //all validation ruls
     public static class StudentValidation
     {
 

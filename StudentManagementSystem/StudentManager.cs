@@ -4,18 +4,18 @@ using System.Text;
 
 namespace StudentManagementSystem
 {
+    //manages the list of students (add, remove, search, sort, count, edit)
+
     public class StudentManager
     {
         private List<Student> StudentList = new List<Student>();
         private int IdCounter = 1000;
-
 
         public void AddStudent(string fullname, int age, string email, string phonenumber)
         {
             Student s = new Student(IdCounter++, fullname, age, email, phonenumber);
             StudentList.Add(s);
         }
-
 
         public bool RemoveStudent(int id)
         {
@@ -28,6 +28,7 @@ namespace StudentManagementSystem
                 }
 
             }
+            //student not found
             return false;
         }
 
@@ -56,10 +57,12 @@ namespace StudentManagementSystem
             {
                 if (temp.ID == id)
                 {
+                    //return student data
                     return temp;
                 }
 
             }
+            //not found
             return null;
         }
 
@@ -99,11 +102,10 @@ namespace StudentManagementSystem
                     }
                 }
             }
-
             return ResultList;
         }
 
-        public int StudentCunt()
+        public int StudentCount()
         {
             return StudentList.Count;
         }
@@ -120,12 +122,12 @@ namespace StudentManagementSystem
                     StudentList[i].Age = age;
                     StudentList[i].Email = email;
                     StudentList[i].PhoneNumber = phonenumber;
-
+                    //student changed
                     return true;
                 }
             }
 
-
+            //student not found
             return false;
 
 

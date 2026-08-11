@@ -4,6 +4,7 @@ using System.Text;
 
 namespace StudentManagementSystem
 {
+    //Simple data model for a student
     public class Student
     {
 
