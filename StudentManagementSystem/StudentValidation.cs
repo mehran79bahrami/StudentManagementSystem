@@ -9,7 +9,7 @@ namespace StudentManagementSystem
     public static class StudentValidation
     {
 
-        public static string ValidateFullName(string fullname)
+        public static string? ValidateFullName(string fullname)
         {
 
             if (fullname.Any(char.IsDigit))
@@ -43,7 +43,7 @@ namespace StudentManagementSystem
             return null;
         }
 
-        public static string ValidateAge(string input, out int age)
+        public static string? ValidateAge(string input, out int age)
         {
 
             age = 0;
@@ -63,12 +63,10 @@ namespace StudentManagementSystem
                 return "Age most be between 14 and 23";
             }
 
-
-
             return null;
         }
 
-        public static string ValidatePhoneNumber(string phonenumber)
+        public static string? ValidatePhoneNumber(string phonenumber)
         {
 
 
@@ -94,7 +92,7 @@ namespace StudentManagementSystem
         }
 
 
-        public static string ValidateEmail(string email)
+        public static string? ValidateEmail(string email)
         {
 
             if (string.IsNullOrWhiteSpace(email))
@@ -173,5 +171,28 @@ namespace StudentManagementSystem
             }
             return null;
         }
+
+        //just validate name for name search
+        public static string? ValidateNameSearch(string searchname)
+        {
+
+            if (searchname.Any(char.IsDigit))
+            {
+                return "name cannot contains number";
+            }
+
+            else if (string.IsNullOrWhiteSpace(searchname))
+            {
+                return "name cannot be empty";
+            }
+            else if (searchname.Length > 30)
+            {
+                return "Name is too long (MAX 30 characters)";
+            }
+
+            return null;
+
+        }
+
     }
 }
