@@ -49,51 +49,20 @@ namespace StudentManagementSystem
 
         public List<Student> SortByFullName()
         {
-            List<Student> ResultList = new List<Student>(StudentList);
-
-
-
-            for (int i = 0; i < ResultList.Count - 1; i++)
-            {
-                for (int j = 0; j < ResultList.Count - 1 - i; j++)
-                {
-                    if (ResultList[j].FullName.CompareTo(ResultList[j + 1].FullName) > 0)
-                    {
-                        Student temp = ResultList[j];
-                        ResultList[j] = ResultList[j + 1];
-                        ResultList[j + 1] = temp;
-                    }
-                }
-            }
-
-            return ResultList;
+            var result = StudentList.OrderBy(x => x.FullName).ToList();
+            return result;
         }
 
         public List<Student> SortByAge()
         {
-            List<Student> ResultList = new List<Student>(StudentList);
-
-            for (int i = 0; i < ResultList.Count - 1; i++)
-            {
-                for (int j = 0; j < ResultList.Count - 1 - i; j++)
-                {
-                    if (ResultList[j].Age.CompareTo(ResultList[j + 1].Age) > 0)
-                    {
-                        Student temp = ResultList[j];
-                        ResultList[j] = ResultList[j + 1];
-                        ResultList[j + 1] = temp;
-                    }
-                }
-            }
-            return ResultList;
+            var result = StudentList.OrderBy(x => x.Age).ToList();
+            return result;
         }
 
         public int StudentCount()
         {
             return StudentList.Count;
         }
-
-
 
         public bool EditStudent(int id, string fullname, int age, string email, string phonenumber)
         {
