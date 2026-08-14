@@ -34,19 +34,12 @@ namespace StudentManagementSystem
             return StudentList.AsReadOnly();
         }
 
-
         public List<Student> SearchStudentFullName(string fullname)
         {
-            List<Student> ResultList = new List<Student>();
-            foreach (Student temp in StudentList)
-            {
-                if (temp.FullName.ToLower() == fullname.ToLower())
-                {
-                    ResultList.Add(temp);
-                }
-            }
-            return ResultList;
+            var found = StudentList.Where(x => x.FullName.ToLower().StartsWith(fullname.ToLower())).ToList();
+            return found;
         }
+       
 
         public Student? SearchStudentId(int id)
         {
@@ -104,23 +97,19 @@ namespace StudentManagementSystem
 
         public bool EditStudent(int id, string fullname, int age, string email, string phonenumber)
         {
-            for (int i = 0; i < StudentList.Count; i++)
+            Student? found = StudentList.FirstOrDefault(x => x.ID == id);
+
+            if (found == null)
             {
-                if (StudentList[i].ID == id)
-                {
-                    StudentList[i].FullName = fullname;
-                    StudentList[i].Age = age;
-                    StudentList[i].Email = email;
-                    StudentList[i].PhoneNumber = phonenumber;
-                    //student changed
-                    return true;
-                }
+                return false;
             }
+            found.FullName = fullname;
+            found.Age = age;
+            found.Email = email;
+            found.PhoneNumber = phonenumber;
 
-            //student not found
-            return false;
-
-
+            //student changed
+            return true;
         }
     }
 }
