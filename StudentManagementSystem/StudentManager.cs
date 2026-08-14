@@ -39,7 +39,7 @@ namespace StudentManagementSystem
             var found = StudentList.Where(x => x.FullName.ToLower().StartsWith(fullname.ToLower())).ToList();
             return found;
         }
-       
+
 
         public Student? SearchStudentId(int id)
         {
@@ -79,6 +79,19 @@ namespace StudentManagementSystem
 
             //student changed
             return true;
+        }
+        //checking for exist email
+        public bool EmailExist(string email)
+        {
+            bool found = StudentList.Any(x => x.Email.ToLower() == email.ToLower());
+            return found;
+        }
+
+        //checking for exist phone number
+        public bool PhoneNumberExist(string phone)
+        {
+            bool found = StudentList.Any(x => x.PhoneNumber == phone);
+            return found;
         }
     }
 }
