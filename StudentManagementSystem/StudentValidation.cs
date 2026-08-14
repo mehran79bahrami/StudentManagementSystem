@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -68,8 +69,6 @@ namespace StudentManagementSystem
 
         public static string? ValidatePhoneNumber(string phonenumber)
         {
-
-
             if (string.IsNullOrEmpty(phonenumber))
             {
                 return "Phone number cannot be empty";
@@ -100,82 +99,35 @@ namespace StudentManagementSystem
                 return "Email cannot be empty";
             }
 
-            foreach (char c in email)
+            if (email.Length > 120)
             {
-                if (!((c >= '0' & c <= '9' || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '.') || (c == '@'))))
-                {
-                    return "Email contains invalid characters. Only letters, numbers, Dot, and @ are allowed";
-                }
+                return "Enail is too long (MAX 120 characters)";
+            }
+            //check format
+            var checkemail = MailAddress.TryCreate(email,out var mail);
+            
+            if(!checkemail)
+            {
+                return "Invalid email format";
             }
 
-            if (!(email.Contains('@')))
+            if (email != mail?.Address)
             {
-                return "Email most contain exactly one '@'";
+                return "Enter only the email address";
             }
-            if (!(email.Contains('.')))
+            var tld = mail.Host.Split('.').Last();
+            if (tld.Length < 2)
             {
-                return "Email most contain '.'";
-            }
-
-            if ((email[0] == '@' || email[email.Length - 1] == '@'))
-            {
-                return "Email cannot start or end with '@'";
-
-            }
-            if ((email[0] == '.' || email[email.Length - 1] == '.'))
-            {
-                return "Email cannot start or end with '.'";
-
+                return "Invalid email format";
             }
 
-            int AtCount = 0;
-            foreach (char c in email)
-            {
-                if (c == '@')
-                {
-                    AtCount++;
-                }
-            }
-            if (AtCount != 1)
-            {
-                return "Email most contain exactly one '@'";
-
-            }
-
-            for (int i = 0; i < email.Length - 1; i++)
-            {
-                char c1 = email[i];
-                char c2 = email[i + 1];
-
-                bool DubleChar1 = ((c1 == '.') || (c1 == '@'));
-                bool DubleChar2 = ((c2 == '.') || (c2 == '@'));
-
-                if ((DubleChar1 == DubleChar2) && DubleChar1 == true)
-                {
-                    return "Email cannot have two consecutive characters (. and @)";
-                }
-            }
-
-            //ty mmd
-            int AtIndex = email.IndexOf('@');
-            string DomainPart = email.Substring(AtIndex + 1);
-            if (!(Regex.IsMatch(DomainPart, "^[^.]+(\\.[^.]+)+$")))
-            {
-                return "Invalid domain";
-            }
-
-            if (email.Length > 75)
-            {
-                return "Enail is too long (MAX 75 characters)";
-
-            }
             return null;
         }
 
         //just validate name for name search
         public static string? ValidateNameSearch(string searchname)
         {
-
+            
             if (searchname.Any(char.IsDigit))
             {
                 return "name cannot contains number";
