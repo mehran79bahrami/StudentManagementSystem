@@ -19,23 +19,21 @@ namespace StudentManagementSystem
 
         public bool RemoveStudent(int id)
         {
-            foreach (Student temp in StudentList)
+            var found = StudentList.FirstOrDefault(x => x.ID == id);
+            if (found == null)
             {
-                if (temp.ID == id)
-                {
-                    StudentList.Remove(temp);
-                    return true;
-                }
-
+                return false;
             }
-            //student not found
-            return false;
+            StudentList.Remove(found);
+            return true;
         }
 
-        public List<Student> ShowStudentList()
+        //show read only list
+        public IReadOnlyList<Student> ShowStudentList()
         {
-            return StudentList;
+            return StudentList.AsReadOnly();
         }
+
 
         public List<Student> SearchStudentFullName(string fullname)
         {
@@ -50,25 +48,17 @@ namespace StudentManagementSystem
             return ResultList;
         }
 
-        public Student SearchStudentId(int id)
+        public Student? SearchStudentId(int id)
         {
-
-            foreach (Student temp in StudentList)
-            {
-                if (temp.ID == id)
-                {
-                    //return student data
-                    return temp;
-                }
-
-            }
-            //not found
-            return null;
+            Student? found = StudentList.FirstOrDefault(x => x.ID == id);
+            return found;
         }
 
         public List<Student> SortByFullName()
         {
             List<Student> ResultList = new List<Student>(StudentList);
+
+
 
             for (int i = 0; i < ResultList.Count - 1; i++)
             {
