@@ -37,6 +37,23 @@ namespace StudentManagementSystem
             Console.WriteLine("╚════════════════════════════════════════════════════════╝");
             Console.ResetColor();
         }
+
+        static void ShowMessage(string message)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("╔═════════════════════════════════════════════════════════════════════════════╗");
+            Console.WriteLine($"║ {message,-75} ║");
+            Console.WriteLine("╚═════════════════════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+        }
+        static void ShowError(string error)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("╔════════════════════════════════════════════════════════════════╗");
+            Console.WriteLine($"║ {error,-62} ║");
+            Console.WriteLine("╚════════════════════════════════════════════════════════════════╝");
+            Console.ResetColor();
+        }
         static void DisplayStudent(Student student)
         {
             Console.WriteLine(
@@ -93,9 +110,8 @@ namespace StudentManagementSystem
                             return;
                         default:
                             Console.Clear();
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("Invalid choice. Please try again");
-                            Console.ResetColor();
+                            ShowError("Invalid choice. Please try again");
+
                             break;
                     }
                 }
@@ -136,9 +152,10 @@ namespace StudentManagementSystem
                     FullName = input;
                     break;
                 }
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                else
+                {
+                    ShowError(error);
+                }
             }
 
             //get a valid age
@@ -156,10 +173,10 @@ namespace StudentManagementSystem
                     age = NewAge;
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                else
+                {
+                    ShowError(error);
+                }
             }
             //get a valid phone number
             while (true)
@@ -173,19 +190,17 @@ namespace StudentManagementSystem
                 string? error = StudentValidation.ValidatePhoneNumber(input);
                 if (error == null && manager.PhoneNumberExist(input))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("This Phone Number is already used by another student");
-                    Console.ResetColor();
+                    ShowError("This Phone Number is already used by another student");
                 }
                 else if (error == null)
                 {
                     PhoneNumber = input;
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                else
+                {
+                    ShowError(error);
+                }
             }
 
             //get a valid email
@@ -201,25 +216,22 @@ namespace StudentManagementSystem
 
                 if (error == null && manager.EmailExist(input))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("This email is already used by another student");
-                    Console.ResetColor();
+                    ShowError("This email is already used by another student");
                 }
                 else if (error == null)
                 {
                     Email = input;
                     break;
                 }
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                else
+                {
+                    ShowError(error);
+                }
             }
 
             //added new student
             manager.AddStudent(FullName, age, Email, PhoneNumber);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("* * * * Student added successfully * * * *");
-            Console.ResetColor();
+            ShowMessage("Student added successfully");
         }
 
         static void ShowAllStudents()
@@ -289,23 +301,17 @@ namespace StudentManagementSystem
                 {
                     break;
                 }
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid ID, Enter a Number");
-                Console.ResetColor();
+                ShowError("Invalid ID");
             }
 
             bool remove = manager.RemoveStudent(InputID);
             if (remove)
             {
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"* * * * Student with ID:{InputID} removed successfully * * * *");
-                Console.ResetColor();
+                ShowMessage($"Student with ID:({ InputID}) removed successfully");
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
-                Console.ResetColor();
+                ShowError($"Student with ID:{InputID} NOT FOUND");
             }
         }
         static void SearchbyIDFlow()
@@ -330,9 +336,7 @@ namespace StudentManagementSystem
                 {
                     break;
                 }
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid ID, Enter a Number");
-                Console.ResetColor();
+                ShowError("Invalid ID");
             }
 
             //get student data with remove
@@ -340,9 +344,7 @@ namespace StudentManagementSystem
 
             if (result == null)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
-                Console.ResetColor();
+                ShowError($"Student with ID:{InputID} NOT FOUND");
                 return;
             }
             else
@@ -363,7 +365,6 @@ namespace StudentManagementSystem
             //get a valid inpur
             while (true)
             {
-
                 Console.Write("\nEnter Student Full Name to Search: ");
                 input = Console.ReadLine();
                 input = input?.Trim();
@@ -378,9 +379,7 @@ namespace StudentManagementSystem
                 }
                 else
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine(error + " Enter again: ");
-                    Console.ResetColor();
+                    ShowError(error + " Enter again: ");
                 }
             }
 
@@ -388,9 +387,7 @@ namespace StudentManagementSystem
 
             if (result.Count == 0)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Student with Full Name:{input} NOT FOUND");
-                Console.ResetColor();
+                ShowError($"Student with Full Name:{input} NOT FOUND");
                 return;
             }
             else
@@ -399,7 +396,7 @@ namespace StudentManagementSystem
                 {
                     DisplayStudent(student);
                 }
-                
+
             }
         }
 
@@ -425,19 +422,14 @@ namespace StudentManagementSystem
                 {
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Invalid ID, Enter a Number");
-                Console.ResetColor();
+                ShowError("Invalid ID");
             }
 
             Student? result = manager.SearchStudentId(InputID);
 
             if (result == null)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
-                Console.ResetColor();
+                ShowError($"Student with ID:{InputID} NOT FOUND");
                 return;
             }
 
@@ -472,10 +464,7 @@ namespace StudentManagementSystem
                     FullName = input;
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                ShowError(error);
             }
 
             //get a valid age to change
@@ -497,10 +486,7 @@ namespace StudentManagementSystem
                     age = NewAge;
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                ShowError(error);
             }
 
             //get a valid phone number to change
@@ -520,19 +506,17 @@ namespace StudentManagementSystem
 
                 if (error == null && manager.PhoneNumberExist(input))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("This Phone Number is already used by another student");
-                    Console.ResetColor();
+                    ShowError("This Phone Number is already used by another student");
                 }
                 else if (error == null)
                 {
                     PhoneNumber = input;
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                else
+                {
+                    ShowError(error);
+                }
             }
 
             //get a valid email to change
@@ -552,27 +536,22 @@ namespace StudentManagementSystem
 
                 if (error == null && manager.EmailExist(input))
                 {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("This Email is already used by another student");
-                    Console.ResetColor();
+                    ShowError("This Email is already used by another student");
                 }
                 else if (error == null)
                 {
                     Email = input;
                     break;
                 }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
+                else
+                {
+                    ShowError(error);
+                }
             }
 
             //complete edit
             manager.EditStudent(result.ID, FullName, age, Email, PhoneNumber);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("* * * * Student Edited successfully * * * *");
-            Console.ResetColor();
-
+            ShowMessage("Student Edited successfully");
         }
     }
 }
