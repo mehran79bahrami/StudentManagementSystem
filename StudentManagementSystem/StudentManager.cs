@@ -9,15 +9,13 @@ namespace StudentManagementSystem
     public class StudentManager
     {
         private List<Student> StudentList = new List<Student>();
-        private int IdCounter = 1000;
-
         public void AddStudent(string fullname, int age, string email, string phonenumber)
         {
-            Student s = new Student(IdCounter++, fullname, age, email, phonenumber);
+            Student s = new Student(Guid.NewGuid(), fullname.ToLower(), age, email.ToLower(), phonenumber);
             StudentList.Add(s);
         }
 
-        public bool RemoveStudent(int id)
+        public bool RemoveStudent(Guid id)
         {
             var found = StudentList.FirstOrDefault(x => x.ID == id);
             if (found == null)
@@ -41,7 +39,7 @@ namespace StudentManagementSystem
         }
 
 
-        public Student? SearchStudentId(int id)
+        public Student? SearchStudentId(Guid id)
         {
             Student? found = StudentList.FirstOrDefault(x => x.ID == id);
             return found;
@@ -64,7 +62,7 @@ namespace StudentManagementSystem
             return StudentList.Count;
         }
 
-        public bool EditStudent(int id, string fullname, int age, string email, string phonenumber)
+        public bool EditStudent(Guid id, string fullname, int age, string email, string phonenumber)
         {
             Student? found = StudentList.FirstOrDefault(x => x.ID == id);
 
@@ -72,9 +70,9 @@ namespace StudentManagementSystem
             {
                 return false;
             }
-            found.FullName = fullname;
+            found.FullName = fullname.ToLower();
             found.Age = age;
-            found.Email = email;
+            found.Email = email.ToLower();
             found.PhoneNumber = phonenumber;
 
             //student changed

@@ -205,7 +205,12 @@ namespace StudentManagementSystem
             IReadOnlyList<Student> StudentList = manager.ShowStudentList();
             foreach (Student student in StudentList)
             {
-                Console.WriteLine($"Full Name: {student.FullName},ID: {student.ID}, Age: {student.Age}, Phone Number: {student.PhoneNumber}, Email: {student.Email}");
+                Console.WriteLine(
+                    $"\nFull Name: {student.FullName}" +
+                    $"\n       ID: {student.ID}" +
+                    $"\n      Age: {student.Age}" +
+                    $"\n    Phone: {student.PhoneNumber}" +
+                    $"\n    Email: {student.Email}");
             }
         }
 
@@ -217,7 +222,12 @@ namespace StudentManagementSystem
             List<Student> StudentList = manager.SortByFullName();
             foreach (Student student in StudentList)
             {
-                Console.WriteLine($"Full Name: {student.FullName},ID: {student.ID}, Age: {student.Age}, Phone Number: {student.PhoneNumber}, Email: {student.Email}");
+                Console.WriteLine(
+                    $"\nFull Name: {student.FullName}" +
+                    $"\n       ID: {student.ID}" +
+                    $"\n      Age: {student.Age}" +
+                    $"\n    Phone: {student.PhoneNumber}" +
+                    $"\n    Email: {student.Email}");
             }
         }
 
@@ -229,7 +239,12 @@ namespace StudentManagementSystem
             List<Student> StudentList = manager.SortByAge();
             foreach (Student student in StudentList)
             {
-                Console.WriteLine($"Full Name: {student.FullName},ID: {student.ID}, Age: {student.Age}, Phone Number: {student.PhoneNumber}, Email: {student.Email}");
+                Console.WriteLine(
+                    $"\nFull Name: {student.FullName}" +
+                    $"\n       ID: {student.ID}" +
+                    $"\n      Age: {student.Age}" +
+                    $"\n    Phone: {student.PhoneNumber}" +
+                    $"\n    Email: {student.Email}");
             }
         }
 
@@ -247,7 +262,7 @@ namespace StudentManagementSystem
             Console.WriteLine("----- Remove Student -----");
             Console.WriteLine("you can type 'cancel' to abort");
 
-            int InputID = 0;
+            Guid InputID;
 
             //get a valid input
             while (true)
@@ -259,7 +274,7 @@ namespace StudentManagementSystem
                     return;
                 }
 
-                if (int.TryParse(input, out InputID))
+                if (Guid.TryParse(input, out InputID))
                 {
                     break;
                 }
@@ -288,7 +303,7 @@ namespace StudentManagementSystem
             Console.WriteLine("----- Search Student by ID -----");
             Console.WriteLine("you can type 'cancel' to abort");
 
-            int InputID = 0;
+            Guid InputID;
 
             //get a valid input
             while (true)
@@ -300,7 +315,7 @@ namespace StudentManagementSystem
                     return;
                 }
 
-                if (int.TryParse(input, out InputID))
+                if (Guid.TryParse(input, out InputID))
                 {
                     break;
                 }
@@ -322,7 +337,12 @@ namespace StudentManagementSystem
             else
             {
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"Full Name: {result.FullName},ID: {result.ID}, Age: {result.Age}, Phone Number: {result.PhoneNumber}, Email: {result.Email}");
+                Console.WriteLine(
+                    $"\nFull Name: {result.FullName}" +
+                    $"\n       ID: {result.ID}" +
+                    $"\n      Age: {result.Age}" +
+                    $"\n    Phone: {result.PhoneNumber}" +
+                    $"\n    Email: {result.Email}");
                 Console.ResetColor();
             }
         }
@@ -374,7 +394,12 @@ namespace StudentManagementSystem
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 foreach (Student student in result)
                 {
-                    Console.WriteLine($"Full Name: {student.FullName},ID: {student.ID}, Age: {student.Age}, Phone Number: {student.PhoneNumber}, Email: {student.Email}");
+                    Console.WriteLine(
+                        $"\nFull Name: {student.FullName}" +
+                        $"\n       ID: {student.ID}" +
+                        $"\n      Age: {student.Age}" +
+                        $"\n    Phone: {student.PhoneNumber}" +
+                        $"\n    Email: {student.Email}");
                 }
                 Console.ResetColor();
             }
@@ -386,7 +411,7 @@ namespace StudentManagementSystem
             Console.WriteLine("----- Edit Student -----");
             Console.WriteLine("you can type 'cancel' to abort");
 
-            int InputID = 0;
+            Guid InputID;
 
             //get a valid input
             while (true)
@@ -398,7 +423,7 @@ namespace StudentManagementSystem
                     return;
                 }
 
-                if (int.TryParse(input, out InputID))
+                if (Guid.TryParse(input, out InputID))
                 {
                     break;
                 }
@@ -422,7 +447,12 @@ namespace StudentManagementSystem
 
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine($"Full Name: {result.FullName},ID: {result.ID}, Age: {result.Age}, Phone Number: {result.PhoneNumber}, Email: {result.Email}");
+                Console.WriteLine(
+                    $"\nFull Name: {result.FullName}" +
+                    $"\n       ID: {result.ID}" +
+                    $"\n      Age: {result.Age}" +
+                    $"\n    Phone: {result.PhoneNumber}" +
+                    $"\n    Email: {result.Email}");
                 Console.ResetColor();
                 Console.WriteLine("----- Editing Student -----");
                 Console.WriteLine("you can type 'cancel' to abort");
