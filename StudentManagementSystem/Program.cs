@@ -6,7 +6,6 @@ namespace StudentManagementSystem
     internal class Program
     {
         static StudentManager manager = new StudentManager();
-
         static void ShowMenu()
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -23,7 +22,6 @@ namespace StudentManagementSystem
             Console.WriteLine("0. Exit");
             Console.Write("Enter your choice: ");
             Console.ResetColor();
-
         }
 
         static void Main(string[] args)
@@ -33,9 +31,9 @@ namespace StudentManagementSystem
                 while (true)
                 {
                     ShowMenu();
-                    string choise = Console.ReadLine();
+                    var choice = Console.ReadLine();
 
-                    switch (choise)
+                    switch (choice)
                     {
                         case "1":
                             AddStudentFlow();
@@ -64,12 +62,10 @@ namespace StudentManagementSystem
                         case "9":
                             ShowTotalCount();
                             break;
-
                         case "0":
                             Console.Clear();
                             Console.WriteLine("----- GoodBye -----");
-                            Environment.Exit(0);
-                            break;
+                            return;
                         default:
                             Console.Clear();
                             Console.ForegroundColor = ConsoleColor.Red;
@@ -82,11 +78,123 @@ namespace StudentManagementSystem
             catch (Exception ex)
             {
                 Console.Clear();
-                Console.ForegroundColor= ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("unexpected ERROR");
                 Console.WriteLine(ex.Message);
                 Console.ResetColor();
             }
+        }
+
+        static void AddStudentFlow()
+        {
+            Console.Clear();
+            Console.WriteLine("----- Add Student -----");
+            Console.WriteLine("you can type 'cancel' to abort");
+            string FullName = null;
+            int age = 0;
+            string Email = null;
+            string PhoneNumber = null;
+
+            //get a valid full name
+            while (true)
+            {
+                Console.Write("\nEnter Student Full Name: ");
+                var input = Console.ReadLine();
+
+                if (input?.ToLower() == "cancel")
+                {
+                    return;
+                }
+                var error = StudentValidation.ValidateFullName(input);
+                if (error == null)
+                {
+                    FullName = input;
+                    break;
+                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error);
+                Console.ResetColor();
+            }
+
+            //get a valid age
+            while (true)
+            {
+                Console.Write("\nEnter Student Age: ");
+                var input = Console.ReadLine();
+                if (input?.ToLower() == "cancel")
+                {
+                    return;
+                }
+                string? error = StudentValidation.ValidateAge(input, out int NewAge);
+                if (error == null && NewAge != 0)
+                {
+                    age = NewAge;
+                    break;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error);
+                Console.ResetColor();
+            }
+            //get a valid phone number
+            while (true)
+            {
+                Console.Write("\nEnter Student Phone Number: ");
+                var input = Console.ReadLine();
+                if (input.ToLower() == "cancel")
+                {
+                    return;
+                }
+                string? error = StudentValidation.ValidatePhoneNumber(input);
+                if (error == null && manager.PhoneNumberExist(input))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("This Phone Number is already used by another student");
+                    Console.ResetColor();
+                }
+                else if (error == null)
+                {
+                    PhoneNumber = input;
+                    break;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error);
+                Console.ResetColor();
+            }
+
+            //get a valid email
+            while (true)
+            {
+                Console.Write("\nEnter Student Email: ");
+                var input = Console.ReadLine();
+                if (input?.ToLower() == "cancel")
+                {
+                    return;
+                }
+                string? error = StudentValidation.ValidateEmail(input);
+
+                if (error == null && manager.EmailExist(input))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("This email is already used by another student");
+                    Console.ResetColor();
+                }
+                else if (error == null)
+                {
+                    Email = input;
+                    break;
+                }
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(error);
+                Console.ResetColor();
+            }
+
+            //added new student
+            manager.AddStudent(FullName, age, Email, PhoneNumber);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("* * * * Student added successfully * * * *");
+            Console.ResetColor();
         }
 
         static void ShowAllStudents()
@@ -94,7 +202,7 @@ namespace StudentManagementSystem
             Console.Clear();
             Console.WriteLine("----- Show All Students -----");
 
-            List<Student> StudentList = manager.ShowStudentList();
+            IReadOnlyList<Student> StudentList = manager.ShowStudentList();
             foreach (Student student in StudentList)
             {
                 Console.WriteLine($"Full Name: {student.FullName},ID: {student.ID}, Age: {student.Age}, Phone Number: {student.PhoneNumber}, Email: {student.Email}");
@@ -133,105 +241,6 @@ namespace StudentManagementSystem
             Console.WriteLine($"Total students in the system: {total}");
         }
 
-        static void AddStudentFlow()
-        {
-            Console.Clear();
-            Console.WriteLine("----- Add Student -----");
-            Console.WriteLine("you can type 'cancel' to abort");
-            string FullName = null;
-            int age = 0;
-            string Email = null;
-            string PhoneNumber = null;
-
-            //get a valid full name
-            while (true)
-            {
-                Console.Write("\nEnter Student Full Name: ");
-                string input = Console.ReadLine();
-
-                if (input.ToLower() == "cancel")
-                {
-                    return;
-                }
-                string error = StudentValidation.ValidateFullName(input);
-                if (error == null)
-                {
-                    FullName = input;
-                    break;
-                }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
-            }
-            //get a valid age
-            while (true)
-            {
-                Console.Write("\nEnter Student Age: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
-                {
-                    return;
-                }
-                string error = StudentValidation.ValidateAge(input, out int NewAge);
-                if (error == null && NewAge != 0)
-                {
-                    age = NewAge;
-                    break;
-                }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
-            }
-            //get a valid phone number
-            while (true)
-            {
-                Console.Write("\nEnter Student Phone Number: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
-                {
-                    return;
-                }
-                string error = StudentValidation.ValidatePhoneNumber(input);
-                if (error == null)
-                {
-                    PhoneNumber = input;
-                    break;
-                }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
-            }
-
-            //get a valid email
-            while (true)
-            {
-                Console.Write("\nEnter Student Email: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
-                {
-                    return;
-                }
-                string error = StudentValidation.ValidateEmail(input);
-                if (error == null)
-                {
-                    Email = input;
-                    break;
-                }
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(error);
-                Console.ResetColor();
-            }
-            //added new student
-            manager.AddStudent(FullName, age, Email, PhoneNumber);
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("* * * * Student added successfully * * * *");
-            Console.ResetColor();
-        }
-
         static void RemoveStudentFlow()
         {
             Console.Clear();
@@ -244,8 +253,8 @@ namespace StudentManagementSystem
             while (true)
             {
                 Console.Write("\nEnter Student ID to remove: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
+                var input = Console.ReadLine();
+                if (input?.ToLower() == "cancel")
                 {
                     return;
                 }
@@ -265,21 +274,14 @@ namespace StudentManagementSystem
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"* * * * Student with ID:{InputID} removed successfully * * * *");
                 Console.ResetColor();
-
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"Student with ID:{InputID} NOT FOUND");
                 Console.ResetColor();
-
             }
-
-
         }
-
-
-
         static void SearchbyIDFlow()
         {
             Console.Clear();
@@ -292,8 +294,8 @@ namespace StudentManagementSystem
             while (true)
             {
                 Console.Write("\nEnter Student ID to Search: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
+                var input = Console.ReadLine();
+                if (input?.ToLower() == "cancel")
                 {
                     return;
                 }
@@ -308,7 +310,7 @@ namespace StudentManagementSystem
             }
 
             //get student data with remove
-            Student result = manager.SearchStudentId(InputID);
+            Student? result = manager.SearchStudentId(InputID);
 
             if (result == null)
             {
@@ -331,8 +333,8 @@ namespace StudentManagementSystem
             Console.WriteLine("----- Search by Full Name ID -----");
             Console.WriteLine("you can type 'cancel' to abort");
 
-            string error = null;
-            string input = null;
+            string? error = null;
+            string? input = null;
 
             //get a valid inpur
             while (true)
@@ -340,11 +342,12 @@ namespace StudentManagementSystem
 
                 Console.Write("\nEnter Student Full Name to Search: ");
                 input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
+                input = input?.Trim();
+                if (input?.ToLower() == "cancel")
                 {
                     return;
                 }
-                error = StudentValidation.ValidateFullName(input);
+                error = StudentValidation.ValidateNameSearch(input);
                 if (error == null)
                 {
                     break;
@@ -355,9 +358,7 @@ namespace StudentManagementSystem
                     Console.WriteLine(error + " Enter again: ");
                     Console.ResetColor();
                 }
-
             }
-
 
             List<Student> result = manager.SearchStudentFullName(input);
 
@@ -384,15 +385,15 @@ namespace StudentManagementSystem
             Console.Clear();
             Console.WriteLine("----- Edit Student -----");
             Console.WriteLine("you can type 'cancel' to abort");
-            
+
             int InputID = 0;
 
             //get a valid input
             while (true)
             {
                 Console.Write("\nEnter Student ID to Edit: ");
-                string input = Console.ReadLine();
-                if (input.ToLower() == "cancel")
+                var input = Console.ReadLine();
+                if (input?.ToLower() == "cancel")
                 {
                     return;
                 }
@@ -407,8 +408,7 @@ namespace StudentManagementSystem
                 Console.ResetColor();
             }
 
-
-            Student result = manager.SearchStudentId(InputID);
+            Student? result = manager.SearchStudentId(InputID);
 
             if (result == null)
             {
@@ -419,8 +419,7 @@ namespace StudentManagementSystem
             }
 
             //editing student
-            while (true)
-            {
+
                 Console.Clear();
                 Console.ForegroundColor = ConsoleColor.Cyan;
                 Console.WriteLine($"Full Name: {result.FullName},ID: {result.ID}, Age: {result.Age}, Phone Number: {result.PhoneNumber}, Email: {result.Email}");
@@ -437,8 +436,8 @@ namespace StudentManagementSystem
                 while (true)
                 {
                     Console.Write("\nEnter new Full Name or type '0' to Skip Change: ");
-                    string input = Console.ReadLine();
-                    if (input.ToLower() == "cancel")
+                    var input = Console.ReadLine();
+                    if (input?.ToLower() == "cancel")
                     {
                         return;
                     }
@@ -446,7 +445,7 @@ namespace StudentManagementSystem
                     {
                         break;
                     }
-                    string error = StudentValidation.ValidateFullName(input);
+                    string? error = StudentValidation.ValidateFullName(input);
                     if (error == null)
                     {
                         FullName = input;
@@ -462,8 +461,8 @@ namespace StudentManagementSystem
                 while (true)
                 {
                     Console.Write("\nEnter new Age or type '0' to Skip Change: ");
-                    string input = Console.ReadLine();
-                    if (input.ToLower() == "cancel")
+                    var input = Console.ReadLine();
+                    if (input?.ToLower() == "cancel")
                     {
                         return;
                     }
@@ -471,7 +470,7 @@ namespace StudentManagementSystem
                     {
                         break;
                     }
-                    string error = StudentValidation.ValidateAge(input, out int NewAge);
+                    string? error = StudentValidation.ValidateAge(input, out int NewAge);
                     if (error == null && NewAge != 0)
                     {
                         age = NewAge;
@@ -487,8 +486,8 @@ namespace StudentManagementSystem
                 while (true)
                 {
                     Console.Write("\nEnter new Phone Number or type '0' to Skip Change: ");
-                    string input = Console.ReadLine();
-                    if (input.ToLower() == "cancel")
+                    var input = Console.ReadLine();
+                    if (input?.ToLower() == "cancel")
                     {
                         return;
                     }
@@ -496,8 +495,15 @@ namespace StudentManagementSystem
                     {
                         break;
                     }
-                    string error = StudentValidation.ValidatePhoneNumber(input);
-                    if (error == null)
+                    string? error = StudentValidation.ValidatePhoneNumber(input);
+
+                    if (error == null && manager.PhoneNumberExist(input))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("This Phone Number is already used by another student");
+                        Console.ResetColor();
+                    }
+                    else if(error == null)
                     {
                         PhoneNumber = input;
                         break;
@@ -512,8 +518,8 @@ namespace StudentManagementSystem
                 while (true)
                 {
                     Console.Write("\nEnter new Email or type '0' to Skip Change: ");
-                    string input = Console.ReadLine();
-                    if (input.ToLower() == "cancel")
+                    var input = Console.ReadLine();
+                    if (input?.ToLower() == "cancel")
                     {
                         return;
                     }
@@ -521,8 +527,15 @@ namespace StudentManagementSystem
                     {
                         break;
                     }
-                    string error = StudentValidation.ValidateEmail(input);
-                    if (error == null)
+                    string? error = StudentValidation.ValidateEmail(input);
+
+                    if (error == null && manager.EmailExist(input))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("This Email is already used by another student");
+                        Console.ResetColor();
+                    }
+                    else if(error == null)
                     {
                         Email = input;
                         break;
@@ -534,12 +547,11 @@ namespace StudentManagementSystem
                 }
 
                 //complete edit
-                manager.EditStudent(result.ID,FullName, age, Email, PhoneNumber);
+                manager.EditStudent(result.ID, FullName, age, Email, PhoneNumber);
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("* * * * Student Edited successfully * * * *");
                 Console.ResetColor();
-                break;
-            }
+            
         }
-        }  
+    }
 }
