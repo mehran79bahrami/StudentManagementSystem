@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System.Text.RegularExpressions;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace StudentManagementSystem
@@ -146,6 +147,7 @@ namespace StudentManagementSystem
                 {
                     return;
                 }
+                input = Regex.Replace(input.Trim(), @"\s+", " ");
                 var error = StudentValidation.ValidateFullName(input);
                 if (error == null)
                 {
@@ -212,6 +214,7 @@ namespace StudentManagementSystem
                 {
                     return;
                 }
+                input = input.Trim();
                 string? error = StudentValidation.ValidateEmail(input);
 
                 if (error == null && manager.EmailExist(input))
@@ -458,6 +461,7 @@ namespace StudentManagementSystem
                 {
                     break;
                 }
+                input = Regex.Replace(input.Trim(), @"\s+", " ");
                 string? error = StudentValidation.ValidateFullName(input);
                 if (error == null)
                 {
@@ -532,6 +536,7 @@ namespace StudentManagementSystem
                 {
                     break;
                 }
+                input = input.Trim();
                 string? error = StudentValidation.ValidateEmail(input);
 
                 if (error == null && manager.EmailExist(input))
